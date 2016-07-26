@@ -1,0 +1,31 @@
+declared-services:
+  speech_to_text:
+    name: speech-to-text-service-standard
+    label: speech_to_text
+    plan: standard
+  text_to_speech:
+    name: text-to-speech-service
+    label: text_to_speech
+    plan: standard
+  language_translation:
+    name: language-translation-service
+    label: language_translation
+    plan: standard
+  iotf-service:
+    label: iotf-service
+    plan: iotf-service-free
+  cloudantNoSQLDB:
+    label: cloudantNoSQLDB
+    plan: Shared
+applications:
+- services:
+  - speech_to_text
+  - text_to_speech
+  - language_translation
+  - iotf-service
+  - cloudantNoSQLDB
+  name: watson-iot-echo
+  host: watson-iot-echo
+  memory: 1024M
+  instances: 1
+  disk_quota: 2048M
