@@ -11,6 +11,7 @@ The Echo Translation Sample is written in Java and can be cloned or downloaded o
      * Bluemix Account
      * Maven
      * Git
+     * Jazzhub Account
 * Hardware Requirements:
      * Raspberry Pi Device with atleast 8 GB SD Card
      * Head-set with Mic - USB Port Connectivity only
@@ -22,6 +23,21 @@ The Echo Translation Sample relies on four Watson services to be Up & Running on
 * [Text To Speech](https://console.ng.bluemix.net/catalog/services/text-to-speech/?cm_mmc=developerWorks-_-dWdevcenter-_-recipes-_-lp)
 * [Watson IoT Platform](https://console.ng.bluemix.net/catalog/services/internet-of-things-platform/?cm_mmc=developerWorks-_-dWdevcenter-_-recipes-_-lp)
 * [Node-RED Starter](https://console.ng.bluemix.net/catalog/starters/node-red-starter/)
+
+Click on the Deploy to Bluemix button, to deploy the Application with the above mentioned Watson services, on the Bluemix Platform
+
+The Deployment process, does the following behind the scenes, for you:
+
+     -  Clones the application code into your Jazzhub account
+     -  Create the application in Bluemix
+     -  Creates the necessary services for this application
+     -  Deploys the application in Bluemix
+
+Once the deployment operation is completed successfully, open the Bluemix Dashboard and click on the Application service that you have currently deployed. The application should now list all the Watson services that are binded to it. Obtain the Authentication credentials for the Watson services STT, LT & TTS, by clicking on the “Show Credentials” option listed against each of these services.
+
+Again, within the Application, you should see the _Watson IoT Platform_ listed under the Binded Services. Click on the WIoTP service and choose the click on _Launch_ button to launch the WIoTP Dashboard.
+
+Refer to the section _Register your Device In Watson IoT Platform_ in the Watson IoT Recipe [Device Management in WIoT PlatformPlatform Initiated Firmware Upgrade](https://developer.ibm.com/recipes/tutorials/device-management-in-wiot-platform-platform-initiated-firmware-upgrade/#r_step4), to successfully register the Raspberry Pi Device on to the Watson IoT Platform, obtain Device credentials and generate the API Keys that shall facilitate Applicaiton connectivity to the Platform in a secure manner.
 
 
 ### Seting up environment on the RPi Device
@@ -62,8 +78,7 @@ In this section, you should familliarize yourself with the Device configuration 
 
 Now, on Raspberry Pi device, open up the Device properties file ‘device.properties’, located under ‘target/classes’. Edit the properties file, to update the Device Registration details, the Authentication credentials of Speech To Text service & Text To Speech service. Post editing the ‘device.properties’ file, the entries should look similar to the one shown below:
 
-`
-// Device Registration detail
+`// Device Registration detail
 
 
 Organization-ID = xxxxxx
@@ -93,9 +108,20 @@ tts-password = xyzxyzxyzxyz
 
 // Optional fields
 
-Clean-Session = true
+Clean-Session = true`
 
-`
+
+### Build & Compile on Eclipse
+
+In a Eclipse environment (either on Linux or Windows platform), the Cloned project of iot-cognitive-samples can be imported as an Existing Maven Project. To compile the same, right-click on the project in the Package Explorer area, choose Run-As and select Maven build:
+
+`VoiceTransmission --> Right Click --> Run As --> Maven build`
+
+You will be prompted with the Edit Configuration and Launch pop up window. Fill up the content “clean package -Dmaven.test.skip=true” against the Goals, choose Apply and click on Run to Build & Compile the project.
+
+`Goals: clean package -Dmaven.test.skip=true`
+ 
+Monitor the messages on the command prompt, as the build process progresses. Ensure that the build process is concluded successfully without any errors or issues. A successful build would have now generated a new directory, by name target/classes, that holds all the compiled files.
 
 
 ### Creating the Node-RED flow
@@ -104,9 +130,9 @@ Clean-Session = true
 This section briefs you on the steps that are needed to configure the Node-RED flow, that efficiently performs the Language Translation process.
 
 
-1. Once the Node-RED Starter application service is created successfully in Bluemix, Open up the Application URL on the browser, or click on the Application URL on the Bluemix Application. This step should help open the Node-RED Interface.
+1. Open up the Application URL on the browser, or click on the Application URL on the Bluemix Application. Append the key word _/red/_ to the Application URL. This step should help open the Node-RED Interface. 
 
-    `http://<unique-application-name>.mybluemix.net`
+    `http://<unique-application-name>.mybluemix.net/red/`
 
 2. The [Node-RED Flow](https://github.com/ibm-watson-iot/iot-cognitive-samples/blob/master/voice-transmission/echo-translation/Node-RED_Flow.txt) that makes up the Bluemix side execution, is made available on the [Github Repository](https://github.com/ibm-watson-iot/iot-cognitive-samples/blob/master/voice-transmission/echo-translation/Node-RED_Flow.txt). Copy the contents of the file and Import the Flow on to the Clipboard in the Node-RED application.
 
@@ -115,7 +141,7 @@ This section briefs you on the steps that are needed to configure the Node-RED f
 3. With the Node-RED Flow successfully imported, edit the IBM IoT In & Out Nodes, to fill up the details of Device ID, Device Type and the API Authentication credentials. Similarly, update the Watson Language Translation node with its authentication details.
 
 
-###Initiating the Watson Voice translation
+###Initiating the Watson Voice Translation
  
 
 In this section, you shall be walked through the steps that shall help initiate the Voice Transmission – Echo Translation sample.
@@ -131,3 +157,12 @@ The following set of steps will kick start the execution of the Voice Transmissi
     `mvn exec:java -Dexec.mainClass="com.ibm.watsoniot.FriendlyWatsonLanguageTranslator"`
 
 3. As the execution is in progress, you should get to see a set of messages at the prompt, indicating that, the connection to the Watson IoT Platform is successfu. It then waits for the Audio Stream from the User. Place the Mic at a convenient distance and speak through it, to initiate the Audio Streaming. Within a second or two, you should hear back the Translated Echo.
+
+### Initiating the Watson Voice Translation on Eclipse
+
+To execute the Voice Transmission – Echo Translation Sample on Eclipse, you need to run the program [FriendlyWatsonLanguageTranslator.java](https://github.com/ibm-watson-iot/iot-cognitive-samples/blob/master/voice-transmission/echo-translation/src/main/java/com/ibm/watsoniot/FriendlyWatsonLanguageTranslator.java). To perform the execution, you need to do as follows:
+
+`FriendlyWatsonLanguageTranslator.java --> Right Click --> Run As --> Java Application`
+ 
+
+That concludes the execution of the Echo Translation sample.
