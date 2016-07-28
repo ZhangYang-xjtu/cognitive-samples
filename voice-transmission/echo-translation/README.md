@@ -24,7 +24,9 @@ The Echo Translation Sample relies on four Watson services to be Up & Running on
 * [Watson IoT Platform](https://console.ng.bluemix.net/catalog/services/internet-of-things-platform/?cm_mmc=developerWorks-_-dWdevcenter-_-recipes-_-lp)
 * [Node-RED Starter](https://console.ng.bluemix.net/catalog/starters/node-red-starter/)
 
-Click on the Deploy to Bluemix button, to deploy the Application with the above mentioned Watson services, on the Bluemix Platform
+Click on the Deploy to Bluemix button, to deploy the Application with the above mentioned Watson services, on the Bluemix Platform:
+
+[![](https://github.com/amprasanna/iot-cognitive-samples/blob/master/deploy.png)](https://hub.jazz.net/deploy/index.html?repository=https://github.com/ibm-watson-iot/iot-cognitive-samples)
 
 The Deployment process, does the following behind the scenes, for you:
 
