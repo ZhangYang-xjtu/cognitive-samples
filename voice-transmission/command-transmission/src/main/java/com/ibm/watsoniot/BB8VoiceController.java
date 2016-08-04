@@ -144,7 +144,9 @@ public class BB8VoiceController {
 			 values.addProperty(RED.toString(), 0);
 			 values.addProperty(BLUE.toString(), 0);
 			 values.addProperty(GREEN.toString(), 0);
-			 if(capTranscript.contains(COMMAND.ROLL.toString()) || capTranscript.contains("well")) {
+			 // Map similar words to roll
+			 if(capTranscript.contains(COMMAND.ROLL.toString()) || capTranscript.contains("well")
+				|| capTranscript.contains("role") || capTranscript.contains("really")) {
 				 json.addProperty("action", ROLL.toString());
 				 return json;
 			 } else if(capTranscript.contains("spin") || capTranscript.contains("in")
