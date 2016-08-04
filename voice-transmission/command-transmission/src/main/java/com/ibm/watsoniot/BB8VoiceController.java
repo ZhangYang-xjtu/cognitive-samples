@@ -99,6 +99,7 @@ public class BB8VoiceController {
 		BB8VoiceController lt = new BB8VoiceController();
 		lt.createApplication();
 		lt.streamVoice();
+		System.out.println("Wait for a second and start speaking");
 		// Run for an hour
 		Thread.sleep(1000 * 3600);
 	}
@@ -110,13 +111,19 @@ public class BB8VoiceController {
 	 * 3. Command to Run
 	 */
 	 private enum COMMAND {
-		 RED("RED"),
-		 BLUE("BLUE"),
-		 GREEN("GREEN"),
-		 SPIN("SPIN"),
-		 RUN("RUN");
+		 RED("red"),
+		 BLUE("blue"),
+		 GREEN("green"),
+		 SPIN("spin"),
+		 ROLL("roll");
 		 
 		 private final String command;
+		 
+		@Override
+		public String toString() {
+			// TODO Auto-generated method stub
+			return this.command;
+		}
 
 		 /**
 		  * @param colour
@@ -125,21 +132,43 @@ public class BB8VoiceController {
 			 this.command = command;
 		 }
 		 
-		 static COMMAND getCommand(String transcript) {
-			 String capTranscript = transcript.toUpperCase();
-			 if(capTranscript.contains(COMMAND.RUN.toString())) {
-				 return COMMAND.RUN;
-			 } else if(capTranscript.contains("SPIN") || capTranscript.contains("IN")) {
-				 return COMMAND.SPIN;
-			 } else if(capTranscript.contains(COMMAND.RED.toString()) || capTranscript.contains("READ")
-					 || capTranscript.contains("RIGHT") || capTranscript.contains("GOOD")) {
-				 return COMMAND.RED;
+		 /**
+		  * Form the payload based on the user transcript
+		  * @param transcript
+		  * @return
+		  */
+		 static JsonObject getPayload(String transcript) {
+			 String capTranscript = transcript.toLowerCase();
+			 JsonObject json = new JsonObject();
+			 JsonObject values = new JsonObject();
+			 values.addProperty(RED.toString(), 0);
+			 values.addProperty(BLUE.toString(), 0);
+			 values.addProperty(GREEN.toString(), 0);
+			 if(capTranscript.contains(COMMAND.ROLL.toString()) || capTranscript.contains("well")) {
+				 json.addProperty("action", ROLL.toString());
+				 return json;
+			 } else if(capTranscript.contains("spin") || capTranscript.contains("in")
+						|| capTranscript.contains("then") || capTranscript.contains("when")) {
+				 json.addProperty("action", SPIN.toString());
+				 return json;
+			 } else if(capTranscript.contains(COMMAND.RED.toString()) || capTranscript.contains("read")
+					 || capTranscript.contains("right") || capTranscript.contains("good")) {
+				 json.addProperty("action", "color");
+				 values.addProperty(RED.toString(), 255);
+				 json.add("values", values);
+				 return json;
 			 } else if(capTranscript.contains(COMMAND.BLUE.toString())
-					 || capTranscript.contains("WE") || capTranscript.contains("BLEW")) {
-				 return COMMAND.BLUE;
-			 } else if(capTranscript.contains(COMMAND.GREEN.toString()) || capTranscript.contains("BEAN")
-					 ||capTranscript.contains("MEAN")) {
-				 return COMMAND.GREEN;
+					 || capTranscript.contains("we") || capTranscript.contains("blew")) {
+				 json.addProperty("action", "color");
+				 values.addProperty(BLUE.toString(), 255);
+				 json.add("values", values);
+				 return json;
+			 } else if(capTranscript.contains(COMMAND.GREEN.toString()) || capTranscript.contains("bean")
+					 ||capTranscript.contains("mean")) {
+				 json.addProperty("action", "color");
+				 values.addProperty(GREEN.toString(), 255);
+				 json.add("values", values);
+				 return json;
 			 }
 			 return null;
 		 }
@@ -190,13 +219,11 @@ public class BB8VoiceController {
 	    			  for(int j = 0; j < alternatives.size(); j++) {
 	    				  System.out.println("Got tanscript: "+ alternatives.get(j).getTranscript());
 	    				  //Map it to the available command
-	    				  COMMAND c = COMMAND.getCommand(alternatives.get(j).getTranscript());
-	    				  if(c != null) {
-	    					  JsonObject data = new JsonObject();
-	    					  data.addProperty("option", c.toString());
-	    					  System.out.println("Publishing command: "+ data.toString());
-	    					  // Publish to Watson IoT Platform
-	    					  myClient.publishCommand(deviceType, deviceId, "execute", data);
+	    				  JsonObject payload = COMMAND.getPayload(alternatives.get(j).getTranscript());
+	    				  if(payload != null) {
+	    					  System.out.println("Publishing command: "+ payload.toString());
+	    					  // Publish to Watson IoT Platform mentioning the device
+	    					  myClient.publishCommand(deviceType, deviceId, "execute", payload);
 	    				  }
 		    		  }
 		    	  }
