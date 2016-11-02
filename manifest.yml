@@ -16,7 +16,7 @@ declared-services:
     plan: iotf-service-free
   cloudantNoSQLDB:
     label: cloudantNoSQLDB
-    plan: Shared
+    plan: Lite
 applications:
 - services:
   - speech_to_text
