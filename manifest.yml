@@ -8,9 +8,9 @@ declared-services:
     label: text_to_speech
     plan: standard
   language_translation:
-    name: language-translation-service
-    label: language_translation
-    plan: standard
+    name: language-translator-service
+    label: language_translator
+    plan: lite
   iotf-service:
     label: iotf-service
     plan: iotf-service-free
@@ -21,7 +21,7 @@ applications:
 - services:
   - speech_to_text
   - text_to_speech
-  - language_translation
+  - language_translator
   - iotf-service
   - cloudantNoSQLDB
   name: watson-iot-echo
