@@ -7,7 +7,7 @@ declared-services:
     name: text-to-speech-service
     label: text_to_speech
     plan: standard
-  language_translation:
+  language_translator:
     name: language-translator-service
     label: language_translator
     plan: lite
